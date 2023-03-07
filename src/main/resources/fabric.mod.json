@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "rpupdater",
+  "version": "${version}",
+
+  "name": "Resource Pack Updater",
+  "description": "Offer a set of actions for Fancy Menu buttons and ticker to update a resource pack.",
+  "authors": [
+    "Raconteur"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+
+  "license": "MIT Licence",
+  "icon": "assets/rpupdater/icon.jpg",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.raconteur.rpupdater.UpdateRPMod"
+    ],
+    "client": [
+      "net.raconteur.rpupdater.UpdateRPModClient"
+    ]
+  },
+  "mixins": [
+    "rpupdater.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.14.14",
+    "fancymenu": ">=2.13.3",
+    "fabric-api": "*",
+    "minecraft": "1.19.2",
+    "java": ">=16"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
