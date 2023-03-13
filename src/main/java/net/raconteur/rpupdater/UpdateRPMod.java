@@ -1,7 +1,6 @@
 package net.raconteur.rpupdater;
 
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.client.gui.screens.TitleScreen;
 import net.raconteur.rpupdater.config.ModConfigs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

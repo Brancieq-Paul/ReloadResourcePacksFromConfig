@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.net.URL;
 import java.net.HttpURLConnection;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -124,6 +125,8 @@ public class UpdateRPAction extends ButtonActionContainer {
         PackRepository pack_repo = minecraft.getResourcePackRepository();
         Collection<Pack> selected_packs = pack_repo.getSelectedPacks();
         boolean selected = false;
+        boolean added = false;
+        Pack updated_pack = null;
 
         // Reload available resource packs
         pack_repo.reload();
@@ -132,23 +135,13 @@ public class UpdateRPAction extends ButtonActionContainer {
         Collection<Pack> selected_packs_m = new ArrayList<>(selected_packs);
         Iterator<Pack> iterator = selected_packs_m.iterator();
 
-        // Remove old resource pack from list
-        while (iterator.hasNext()) {
-            Pack pack = iterator.next();
-            if (pack.getId().matches("file/" + ModConfigs.RP_NAME_REGEX)) {
-                iterator.remove();
-                minecraft.options.resourcePacks.remove(pack.getId());
-                UpdateRPMod.LOGGER.info("Old pack removed from pack selection !");
-            }
-        }
-
         // Select updated resource pack
         UpdateRPMod.LOGGER.info("Adding updated pack... !");
         Collection<Pack> availablePacks = pack_repo.getAvailablePacks();
+        // Choose updated pack
         for (Pack pack : availablePacks) {
             if (pack.getId().equals("file/"+updated_pack_name)) {
-                selected_packs_m.add(pack);
-                minecraft.options.resourcePacks.add(pack.getId());
+                updated_pack = pack;
                 selected = true;
                 UpdateRPMod.LOGGER.info("New pack added to pack selection !");
             }
@@ -157,6 +150,25 @@ public class UpdateRPAction extends ButtonActionContainer {
             UpdateRPMod.LOGGER.error("New pack \""+ updated_pack_name +"\" could not be added to pack selection !");
             return;
         }
+
+        List<Pack> temp = new ArrayList<>(selected_packs_m);
+        // Set updated pack
+        while (iterator.hasNext()) {
+            Pack pack = iterator.next();
+            if (pack.getId().matches("file/" + ModConfigs.RP_NAME_REGEX)) {
+                int index = minecraft.options.resourcePacks.indexOf(pack.getId());
+                minecraft.options.resourcePacks.set(index, updated_pack.getId());
+                index = temp.indexOf(pack);
+                temp.set(index, updated_pack);
+                added = true;
+                UpdateRPMod.LOGGER.info("Old pack removed from pack selection !");
+                break;
+            }
+        }
+        if (!added) {
+            temp.add(updated_pack);
+        }
+        selected_packs_m = temp;
 
         Collection<String> id_list = new ArrayList<>();
         for (Pack pack : selected_packs_m) {
