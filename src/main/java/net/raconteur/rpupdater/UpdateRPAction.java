@@ -180,7 +180,7 @@ public class UpdateRPAction extends ButtonActionContainer {
         pack_repo.reload();
         minecraft.options.save();
         UpdateRPMod.LOGGER.info("Selected resource packs list updated !");
-        minecraft.reloadResourcePacks();
+        minecraft.options.updateResourcePacks(pack_repo);
         UpdateRPMod.LOGGER.info("Resource packs reloaded!");
     }
 
